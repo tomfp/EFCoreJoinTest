@@ -68,8 +68,8 @@ namespace EFCoreJoinTest
             var Sql = $@"SELECT V.*
                         FROM V1Extended AS V
                         JOIN CommonData AS C ON C.Id = V.CommonDataId
-                        WHERE C.CaseStudyId = {caseStudyId};";
-            var param = new object[0];
+                        WHERE C.CaseStudyId = {caseStudyId}
+                        ORDER BY V.CommonDataId DESC;";
             var extnRecords = context.V1Extended.FromSql(Sql);
 
             return extnRecords;
