@@ -43,6 +43,10 @@ namespace EFCoreJoinTest
             var extRecs4 = QueryFromSyntax(context2, caseStudyId);
             PrintQueryResults(extRecs4, "Post SQL ADD From Syntax");
 
+            var extRecs5 = QuerySQL(context2, caseStudyId);
+            PrintQueryResults(extRecs5, "Queried by SQL");
+
+
             context2.Dispose();
             Console.ReadLine();
 
@@ -57,6 +61,18 @@ namespace EFCoreJoinTest
             {
                 Console.WriteLine($"Ext Record: {v1Extended.ExtendedData}");
             }
+        }
+
+        static IEnumerable<V1Extended> QuerySQL(CaseStudyContext context, int caseStudyId)
+        {
+            var Sql = $@"SELECT V.*
+                        FROM V1Extended AS V
+                        JOIN CommonData AS C ON C.Id = V.CommonDataId
+                        WHERE C.CaseStudyId = {caseStudyId};";
+            var param = new object[0];
+            var extnRecords = context.V1Extended.FromSql(Sql);
+
+            return extnRecords;
         }
 
         static IEnumerable<V1Extended> QueryLambda(CaseStudyContext context, int caseStudyId)
@@ -79,7 +95,6 @@ namespace EFCoreJoinTest
                              select v;
             return extRecords;
         }
-
 
         static void PopuplateContext(CaseStudyContext context)
         {
